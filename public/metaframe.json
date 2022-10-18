@@ -1,16 +1,13 @@
 {
-	"version": "0.3",
+	"version": "0.6",
 	"metadata": {
-		"title": "metaframe-template"
+		"name": "Mediapipe Hands",
+		"tags": []
 	},
-	"inputs": {
-		"*": {
-			"type": "application/octet-stream:base64"
+	"outputs": {
+		"hands": {
+			"type": "application/json"
 		}
 	},
-    "outputs": {
-		"*": {
-			"type": "application/octet-stream:base64"
-		}
-	}
+	"allow": "cross-origin-isolated;fullscreen;camera"
 }

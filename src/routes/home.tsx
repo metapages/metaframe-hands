@@ -1,12 +1,11 @@
 import {
   SimpleGrid,
 } from "@chakra-ui/react";
-import { Header } from "/@/components/Header";
-import { MetaframeOutputsRaw } from '/@/components/MetaframeOutputsRaw';
+import { HandDetectionStream } from "../components/HandDetectionStream";
+
 
 export const Route: React.FC = () => (
   <SimpleGrid columns={1} spacing={10}>
-    <Header />
-    <MetaframeOutputsRaw />
+    <HandDetectionStream />
   </SimpleGrid>
 );
