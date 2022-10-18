@@ -167,6 +167,15 @@ _mkcert:
     BASE=$(if [ -f "public/CNAME" ]; then echo ""; else echo "{{PACKAGE_NAME_SHORT}}"; fi) \
         deno run --unstable --allow-all {{DENO_SOURCE}}/browser/gh-pages-publish-to-docs.ts --versioning=true
 
+
+# # build the browser app in ./docs (default for github pages)
+# _browser_client_build BASE="":
+#     HOST={{APP_FQDN}} \
+#     OUTDIR=./docs \
+#     BASE={{BASE}} \
+#         deno run --allow-all --unstable {{DENO_SOURCE}}/browser/vite-build.ts --versioning=true
+
+
 @_cloudflare_pages_publish: _ensure_npm_modules
     deno run --unstable --allow-all {{DENO_SOURCE}}/browser/gh-pages-publish-to-docs.ts --versioning=true
 
