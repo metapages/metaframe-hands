@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
-import * as mpHands from "@mediapipe/hands";
 import { MediaPipeHandsMediaPipeModelConfig } from "@tensorflow-models/hand-pose-detection";
 import * as handPoseDetection from "@tensorflow-models/hand-pose-detection";
 import * as tfjsWasm from "@tensorflow/tfjs-backend-wasm";
@@ -62,7 +61,7 @@ export const HandDetectionStream: React.FC = () => {
         // @ts-ignore
         runtime: "mediapipe", // or 'tfjs'
         // solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/hands",
-        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${mpHands.VERSION}`,
+        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915`,
         modelType: "full",
       };
 

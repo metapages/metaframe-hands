@@ -83,7 +83,7 @@ _browser_client_build BASE="":
 @test: (_tsc "--build") build
 
 # Build the [browser app, npm lib] for production. Called automatically by "test" and "publish"
-build BASE="": _ensure_npm_modules (_tsc "--build") (_browser_client_build BASE) _npm_build
+build BASE="": _ensure_npm_modules (_tsc "--build") (_browser_client_build BASE)
 
 # Deletes: [ .certs, dist ]
 @clean:
