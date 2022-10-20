@@ -7,6 +7,9 @@
 	"outputs": {
 		"hands": {
 			"type": "application/json"
+		},
+		"cameraState": {
+			"type": "application/json"
 		}
 	},
 	"allow": "cross-origin-isolated;fullscreen;camera"

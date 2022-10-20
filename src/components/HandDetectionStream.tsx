@@ -42,6 +42,21 @@ export const HandDetectionStream: React.FC = () => {
     };
   }, [setCamera, cameraState]);
 
+  // send the camera state once
+  useEffect(() => {
+    if (cameraState && metaframeBlob?.metaframe) {
+      const betterCameraState = {
+        targetFPS: cameraState.targetFPS,
+        sizeOption: {
+          width: parseInt(cameraState.sizeOption.split(" X ")[0]),
+          height: parseInt(cameraState.sizeOption.split(" X ")[1]),
+        },
+      };
+      const metaframe = metaframeBlob.metaframe;
+      metaframe.setOutputs({cameraState: betterCameraState});
+    }
+  }, [cameraState, metaframeBlob?.metaframe]);
+
   /**
    * Create the detector
    */

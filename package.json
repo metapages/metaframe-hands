@@ -26,7 +26,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@metapages/hash-query": "^0.4.5",
-    "@metapages/metaframe-hook": "^1.0.11",
+    "@metapages/metaframe-hook": "^1.0.12",
     "@metapages/metapage": "^0.13.5",
     "@tensorflow-models/hand-pose-detection": "^2.0.0",
     "@tensorflow/tfjs-backend-wasm": "^3.20.0",
