@@ -23,6 +23,8 @@ DENO_SOURCE                        := env_var_or_default("DENO_SOURCE", "https:/
 # vite needs an extra memory boost
 vite                               := "VITE_APP_FQDN=" + APP_FQDN + " VITE_APP_PORT=" + APP_PORT + " NODE_OPTIONS='--max_old_space_size=16384' ./node_modules/vite/bin/vite.js"
 tsc                                := "./node_modules/typescript/bin/tsc"
+webpack                            := "./node_modules/.bin/webpack"
+
 # minimal formatting, bold is very useful
 bold                               := '\033[1m'
 normal                             := '\033[0m'
@@ -94,8 +96,8 @@ watch:
     watchexec -w src -w tsconfig.json -w package.json -w vite.config.ts -- just _browser_assets_build
 
 # Watch and serve browser client. Can't use vite to serve: https://github.com/vitejs/vite/issues/2754
-serve: _mkcert build
-    cd docs && \
+serve: _mkcert _webpack_build
+    cd dist && \
     npx http-server --cors '*' -a {{APP_FQDN}} -p {{APP_PORT}} --ssl --cert ../.certs/{{APP_FQDN}}.pem --key ../.certs/{{APP_FQDN}}-key.pem
 
 # Build npm package for publishing
@@ -163,9 +165,9 @@ _mkcert:
     {{vite}} {{args}}
 
 # update "gh-pages" branch with the (versioned and default) current build (./docs) (and keeping all previous versions)
-@_githubpages_publish: _ensure_npm_modules
-    BASE=$(if [ -f "public/CNAME" ]; then echo ""; else echo "{{PACKAGE_NAME_SHORT}}"; fi) \
-        deno run --unstable --allow-all {{DENO_SOURCE}}/browser/gh-pages-publish-to-docs.ts --versioning=true
+# @_githubpages_publish: _ensure_npm_modules
+#     BASE=$(if [ -f "public/CNAME" ]; then echo ""; else echo "{{PACKAGE_NAME_SHORT}}"; fi) \
+#         deno run --unstable --allow-all {{DENO_SOURCE}}/browser/gh-pages-publish-to-docs.ts --versioning=true
 
 
 # # build the browser app in ./docs (default for github pages)
@@ -176,8 +178,44 @@ _mkcert:
 #         deno run --allow-all --unstable {{DENO_SOURCE}}/browser/vite-build.ts --versioning=true
 
 
-@_cloudflare_pages_publish: _ensure_npm_modules
-    deno run --unstable --allow-all {{DENO_SOURCE}}/browser/gh-pages-publish-to-docs.ts --versioning=true
+@_webpack_build: _ensure_npm_modules
+    {{webpack}} --mode production --config webpack.config.js
+
+@_cloudflare_pages_publish: _ensure_npm_modules _githubpages_publish
+
+_githubpages_publish: _ensure_npm_modules _ensureGitPorcelain
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Mostly CURRENT_BRANCH should be main, but maybe you are testing on a different branch
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    if [ -z "$(git branch --list gh-pages)" ]; then
+        git checkout -b gh-pages;
+    fi
+
+    git checkout gh-pages
+
+    git rebase --strategy recursive --strategy-option theirs ${CURRENT_BRANCH}
+
+    # Then build
+    BASE=$(cat package.json | jq -r .name | cut -d'/' -f2)
+    rm -rf dist
+    just _webpack_build
+    mkdir -p docs/v
+    cp -r dist/* docs/
+    cp -r dist/* docs/v/$(cat package.json | jq -r .version)
+
+    # Now commit and push
+    git add --all --force docs
+    git commit -m "site v$(cat package.json | jq -r .version)"
+    git push -uf origin gh-pages
+
+    # Return to the original branch
+    git checkout ${CURRENT_BRANCH}
+    echo -e "👉 Github configuration (once): 🔗 https://github.com/$(git remote get-url origin | sd 'git@github.com:' '' | sd '.git' '')/settings/pages"
+    echo -e "  - {{green}}Source{{normal}}"
+    echo -e "    - {{green}}Branch{{normal}}: gh-pages 📁 /docs"
+
 
 ####################################################################################
 # Ensure docker image for local and CI operations

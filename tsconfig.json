@@ -13,7 +13,7 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "node",
-    "noEmit": true,
+    // "noEmit": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "outDir": "./dist",
