@@ -205,7 +205,7 @@ _githubpages_publish: _ensure_npm_modules _ensureGitPorcelain
     just _webpack_build
     mkdir -p docs/v
     cp -r dist/* docs/
-    cp -r dist/* docs/v/$(cat package.json | jq -r .version)
+    cp -r dist docs/v/$(cat package.json | jq -r .version)
 
     # Now commit and push
     git add --all --force docs
