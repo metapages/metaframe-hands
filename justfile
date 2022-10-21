@@ -206,6 +206,7 @@ _githubpages_publish: _ensure_npm_modules _ensureGitPorcelain
     mkdir -p docs/v
     cp -r dist/* docs/
     cp -r dist docs/v/$(cat package.json | jq -r .version)
+    rm -rf docs/.DS_Store
 
     # Now commit and push
     git add --all --force docs
