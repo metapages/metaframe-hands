@@ -1,0 +1,16 @@
+{
+	"version": "0.6",
+	"metadata": {
+		"name": "Mediapipe Hands",
+		"tags": []
+	},
+	"outputs": {
+		"hands": {
+			"type": "application/json"
+		},
+		"cameraState": {
+			"type": "application/json"
+		}
+	},
+	"allow": "cross-origin-isolated;fullscreen;camera"
+}
