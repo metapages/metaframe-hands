@@ -41,7 +41,6 @@ let inferenceTimeSum = 0,
 let rafId: number;
 
 async function createDetector() {
-  console.log("createDetector STATE", STATE);
   switch (STATE.model) {
     case handdetection.SupportedModels.MediaPipeHands:
       const runtime = STATE.backend.split("-")[0];
