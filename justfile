@@ -178,8 +178,10 @@ _mkcert:
 #         deno run --allow-all --unstable {{DENO_SOURCE}}/browser/vite-build.ts --versioning=true
 
 
-@_webpack_build: _ensure_npm_modules
+_webpack_build: _ensure_npm_modules
+    rm -rf dist
     {{webpack}} --mode production --config webpack.config.js
+    rm -rf dist/.DS*
 
 @_cloudflare_pages_publish: _ensure_npm_modules _githubpages_publish
 
